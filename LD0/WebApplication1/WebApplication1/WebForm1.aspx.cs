@@ -16,7 +16,9 @@ namespace WebApplication1
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-
+            Label1.Text = "Labas " + TextBox1.Text + "!";
+            TextBox1.Visible = false;
         }
+
     }
 }
