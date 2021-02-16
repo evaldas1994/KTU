@@ -18,12 +18,12 @@ namespace LD1
         protected void Button1_Click(object sender, EventArgs e)
         {
             string path = Server.MapPath("~/App_Data/Duom3.txt");
-
-            ReadFile(path);
+            List<City> cities = new List<City>();
+            ReadFile(path, cities);
 
         }
 
-        public void ReadFile(string path)
+        public void ReadFile(string path, List<City> cities)
         {
             try
             {
@@ -45,16 +45,8 @@ namespace LD1
                         cityPlan[i] = streetPlan;
                     }
 
-                    // Set data to city class
-                    City city = new City();
-
-                    city.MapSize = mapSize;
-                    city.Location = new int[] {locationY, locationX };
-                    city.Map = cityPlan;
-
                     // Set data to cities list
-                    List<City> cities = new List<City>();
-                    cities.Add(city);
+                    SetDataToList(mapSize, locationY, locationX, cityPlan, cities);
                 }
             }
 
@@ -63,6 +55,17 @@ namespace LD1
                 Console.WriteLine("The file could not be read:");
                 Console.WriteLine(ee.Message);
             }
+        }
+
+        public void SetDataToList(int mapSize, int locationY, int locationX, char[][] cityPlan, List<City> cities)
+        {
+            City city = new City();
+
+            city.MapSize = mapSize;
+            city.Location = new int[] { locationY, locationX };
+            city.Map = cityPlan;
+
+            cities.Add(city);
         }
     }
 }
