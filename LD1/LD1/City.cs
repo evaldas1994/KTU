@@ -7,14 +7,14 @@ namespace LD1
 {
     public class City
     {
-        private char[] street;
+        private char[][] map;
 
         public City()
         {
-            this.Street = street;
+            
         }
 
-        public char[] Street
+        public char[][] Map
         {
             get; set;
         }

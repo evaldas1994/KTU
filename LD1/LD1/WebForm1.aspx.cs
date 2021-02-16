@@ -42,10 +42,15 @@ namespace LD1
                     for (int i = 0; i < matrix; i++)
                     {
                         streetPlan = sr.ReadLine().ToCharArray();
-                        cityPlan[i] = streetPlan;                       
+                        cityPlan[i] = streetPlan;
                     }
+
+                    City city = new City();
+                    city.Map = cityPlan;
                 }
+
             }
+
             catch (IOException ee)
             {
                 Console.WriteLine("The file could not be read:");
