@@ -33,22 +33,29 @@ namespace LD1
                     // Read the stream as a string[].
                     string[] readedandsplitted = sr.ReadLine().Split(' ');
 
-                    int matrix = Int32.Parse(readedandsplitted[0]);
+                    int mapSize = Int32.Parse(readedandsplitted[0]);
                     int locationY = Int32.Parse(readedandsplitted[1]);
                     int locationX = Int32.Parse(readedandsplitted[2]);
 
                     char[] streetPlan;
-                    char[][] cityPlan = new char[matrix][]; ;
-                    for (int i = 0; i < matrix; i++)
+                    char[][] cityPlan = new char[mapSize][]; ;
+                    for (int i = 0; i < mapSize; i++)
                     {
                         streetPlan = sr.ReadLine().ToCharArray();
                         cityPlan[i] = streetPlan;
                     }
 
+                    // Set data to city class
                     City city = new City();
-                    city.Map = cityPlan;
-                }
 
+                    city.MapSize = mapSize;
+                    city.Location = new int[] {locationY, locationX };
+                    city.Map = cityPlan;
+
+                    // Set data to cities list
+                    List<City> cities = new List<City>();
+                    cities.Add(city);
+                }
             }
 
             catch (IOException ee)
