@@ -17,17 +17,19 @@ namespace LD1
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            string path = Server.MapPath("~/App_Data/Duom3.txt");
+            string pathD = Server.MapPath("~/App_Data/Duom3.txt");
+            string pathR = Server.MapPath("~/App_Data/Res3.txt");
             List<City> cities = new List<City>();
-            ReadFile(path, cities);
+            ReadFile(pathD, cities);
 
+            WriteFile(pathR, cities);
         }
 
         public void ReadFile(string path, List<City> cities)
         {
             try
             {
-                // Open the text file using a stream reader.
+                // Open the text file using a streamReader.
                 using (var sr = new StreamReader(path))
                 {
                     // Read the stream as a string[].
@@ -66,6 +68,37 @@ namespace LD1
             city.Map = cityPlan;
 
             cities.Add(city);
+        }
+
+        public void WriteFile( string path, List<City> cities)
+        {
+            try
+            {
+                // Open the text file using a streamReader.
+                using (StreamWriter sw = new StreamWriter(path))
+                {
+                    // Write file using StreamWriter  
+
+                    foreach(City city in cities)
+                    {
+                        sw.Write(city.MapSize + " " + city.Location[0] + " " + city.Location[1]);
+                        for(int i=0; i<city.Map.Length; i++)
+                        {
+                            sw.WriteLine();
+                            for(int j=0; j<city.Map.Length; j++)
+                            {
+                                sw.Write(city.Map[i][j]);
+                            }                          
+                        }
+                    }
+                }
+            }
+
+            catch (IOException ee)
+            {
+                Console.WriteLine("The file could not be wrote");
+                Console.WriteLine(ee.Message);
+            }
         }
     }
 }
