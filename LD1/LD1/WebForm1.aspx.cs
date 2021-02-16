@@ -22,7 +22,7 @@ namespace LD1
             List<City> cities = new List<City>();
             ReadFile(pathD, cities);
 
-            int[] nearestShop = GetNearestFlowerShop(cities);
+            int[] direction = getDirection(cities);
 
             WriteFile(pathR, cities);
         }
@@ -140,6 +140,33 @@ namespace LD1
         public int GetDistanceToNewShop(List<City> cities, int i, int j)
         {
             return ((cities[0].Location[0] - 1) - i) + ((cities[0].Location[1] - 1) - j);
+        }
+
+        public int[] getDirection(List<City> cities)
+        {
+           
+            int[] direction = new int[] { 0, 0 };
+            if (cities[0].Location[0] -1 > GetNearestFlowerShop(cities)[0])
+            {
+                direction[0] = -1;
+            }
+
+            if (cities[0].Location[0] - 1 < GetNearestFlowerShop(cities)[0])
+            {
+                direction[0] = 1;
+            }
+
+            if (cities[0].Location[1] - 1 > GetNearestFlowerShop(cities)[1])
+            {
+                direction[1] = -1;
+            }
+
+            if (cities[0].Location[1] - 1 < GetNearestFlowerShop(cities)[1])
+            {
+                direction[1] = 1;
+            }
+
+            return direction;
         }
     }
 }
