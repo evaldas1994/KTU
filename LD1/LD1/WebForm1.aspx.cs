@@ -21,10 +21,11 @@ namespace LD1
             string pathR = Server.MapPath("~/App_Data/Res3.txt");
             List<City> cities = new List<City>();
             ReadFile(pathD, cities);
-            FindWay(cities);  //nelabai veikiantis
 
 
-            WriteFile(pathR, cities);
+            int visitedArea = 0;
+            visitedArea2 = FindWay(cities, visitedArea);  //nelabai veikiantis
+            WriteFile(pathR, cities, visitedArea2);
         }
 
         public void ReadFile(string path, List<City> cities)
@@ -72,7 +73,7 @@ namespace LD1
             cities.Add(city);
         }
 
-        public void WriteFile( string path, List<City> cities)
+        public void WriteFile( string path, List<City> cities, int visitedArea)
         {
             try
             {
@@ -80,8 +81,9 @@ namespace LD1
                 using (StreamWriter sw = new StreamWriter(path))
                 {
                     // Write file using StreamWriter  
+                    sw.WriteLine("Parduotuvė yra už " + visitedArea + " kvartalų");
 
-                    foreach(City city in cities)
+                    foreach (City city in cities)
                     {
                         sw.Write(city.MapSize + " " + city.Location[0] + " " + city.Location[1]);
                         for(int i=0; i<city.Map.Length; i++)
@@ -119,6 +121,8 @@ namespace LD1
                         }
                         else
                         {
+                            int ddis = GetDistanceToNearestShop(cities, nearestFlowerShop);
+                            int ddis2 = GetDistanceToNewShop(cities, i, j);
                             if (GetDistanceToNearestShop(cities, nearestFlowerShop) > GetDistanceToNewShop(cities, i, j))
                             {
                                 nearestFlowerShop[0] = i;
@@ -134,7 +138,7 @@ namespace LD1
 
         public int GetDistanceToNearestShop(List<City> cities, int[] nearestFlowerShop)
         {
-            int distance = ((cities[0].Location[0] - 1) - nearestFlowerShop[0]) + ((cities[0].Location[1] - 1) - nearestFlowerShop[1]);
+            int distance = (System.Math.Abs((cities[0].Location[0] - 1) - nearestFlowerShop[0])) + (System.Math.Abs((cities[0].Location[1] - 1) - nearestFlowerShop[1]));
             if(distance < 0)
             {
                 return distance * (-1);
@@ -145,7 +149,7 @@ namespace LD1
 
         public int GetDistanceToNewShop(List<City> cities, int i, int j)
         {
-            return ((cities[0].Location[0] - 1) - i) + ((cities[0].Location[1] - 1) - j);
+            return (System.Math.Abs((cities[0].Location[0] - 1) - i)) + System.Math.Abs(((cities[0].Location[1] - 1) - j));
         }
 
         public int[] getDirection(List<City> cities)
@@ -175,99 +179,109 @@ namespace LD1
             return direction;
         }
 
-        public int FindWay(List<City> cities)
+        public int FindWay(List<City> cities, int visitedArea)
         {
+            
             int[] location = cities[0].Location;
             int distance = GetDistanceToNearestShop(cities, GetNearestFlowerShop(cities));
 
-            if(distance == 0)
+            int[] gnfs = GetNearestFlowerShop(cities);
+
+            if (distance == 0)
             {
-                Label1.Text = "Programa baigė darbą";
-                return 0;
+                cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
+                Label1.Text = "Programa baigė darbą " + visitedArea;
+                return visitedArea;
             }
-           
-                
-                    System.Diagnostics.Debug.WriteLine("X ašyje dar reikia eiti");
-                    if(((location[1] - 1 + getDirection(cities)[1]) < cities[0].MapSize) && ((location[1] - 1 + getDirection(cities)[1]) >=0))  //jei kairėje vis dar yra langelių
+
+
+
+            if (isActive(cities, location[0] - 1, location[1] - 1 + getDirection(cities)[1]) == true)  //Tikrina langelį kairėje, ar nėra kraštinis ir ar nėra 1;
+            {
+                //System.Diagnostics.Debug.WriteLine("bLA ===============");
+                if ((getNextDirectionByX(cities) == 'G'))   //jei X ašyje G
+                {
+                    int gd = getDirection(cities)[1];
+                    cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
+                    cities[0].Location = new int[] { location[0], location[1] + gd };  //Pakeičiu klasėje naują vietą
+                }
+                else
+                {
+                    if ((getNextDirectionByY(cities) == 'G'))   //jei Y ašyje G
                     {
-                        if((cities[0].Map[location[0]-1][location[1]-1 + getDirection(cities)[1]] == '0'))   //jei kairėje 0  ||  jei kairėje '.', o viršuje ne '0'
+                        cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
+                        cities[0].Location = new int[] { location[0] + getDirection(cities)[0], location[1] };  //Pakeičiu klasėje naują vietą
+                    }
+                    else
+                    {
+                        if ((getNextDirectionByX(cities) == '0'))   //jei X ašyje 0
                         {
                             cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
                             cities[0].Location = new int[] { location[0], location[1] + getDirection(cities)[1] };  //Pakeičiu klasėje naują vietą
-                            System.Diagnostics.Debug.WriteLine("Paeinam į kairę. Dabartinės koordinatės: [" + (location[0] - 1) + ":" + (location[1] - 1) + "]");
                         }
                         else
                         {
-                            if((cities[0].Map[location[0] - 1][location[1] - 1 + getDirection(cities)[1]] == '.') && ((cities[0].Map[location[0] - 1 + getDirection(cities)[0]][location[1] - 1] != '0')) )
+                            if ((getNextDirectionByY(cities) == '0'))   //jei Y ašyje 0
                             {
                                 cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
-                                cities[0].Location = new int[] { location[0], location[1] + (getDirection(cities)[1]*2) };  //Pakeičiu klasėje naują vietą
-                                System.Diagnostics.Debug.WriteLine("Paeinam į kairę. Dabartinės koordinatės: [" + (location[0] - 1) + ":" + (location[1] - 1) + "]");
+                                cities[0].Location = new int[] { location[0] + getDirection(cities)[0], location[1] };  //Pakeičiu klasėje naują vietą
+                            }
+                            else
+                            {
+                                if ((getNextDirectionByX(cities) == '.'))   //jei X ašyje 0
+                                {
+                                    visitedArea = visitedArea + 1;
+                                    cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
+                                    cities[0].Location = new int[] { location[0], location[1] + getDirection(cities)[1] };  //Pakeičiu klasėje naują vietą
+                                }
+                                else
+                                {
+                                    if ((getNextDirectionByY(cities) == '.'))   //jei Y ašyje 0
+                                    {
+                                        visitedArea = visitedArea + 1;
+                                        cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
+                                        cities[0].Location = new int[] { location[0] + getDirection(cities)[0], location[1] };  //Pakeičiu klasėje naują vietą
+                                    }
+                                }
                             }
                         }
                     }
-                        //System.Diagnostics.Debug.WriteLine("Dabartinės koordinatės: [" + (location[0]-1) + ":" + (location[1]-1) + "]");
-                        //System.Diagnostics.Debug.WriteLine("Kairėje yra: " + cities[0].Map[location[0]-1][location[1]-1-1]);
-                        //System.Diagnostics.Debug.WriteLine("Viršuje yra: " + cities[0].Map[location[0]-1-1][location[1]-1]);
-                        //System.Diagnostics.Debug.WriteLine("Dešinėje yra: " + cities[0].Map[location[0]-1][location[1]]);
-                        //System.Diagnostics.Debug.WriteLine("Apačioje yra: " + cities[0].Map[location[0]][location[1]-1]);
-                    //}
-                    
-               
-
-                
-                    System.Diagnostics.Debug.WriteLine("X ašyje dar reikia eiti");
-                    if (((location[0] - 1 + getDirection(cities)[0]) < cities[0].MapSize) && (location[0] - 1 + getDirection(cities)[0]) >= 0)  //jei kairėje vis dar yra langelių
-                    {
-
-                    //tryyyy
-                    if (((cities[0].Map[location[0] - 1 + getDirection(cities)[0]][location[1] - 1] == '.') && (cities[0].Map[location[0] - 1 + (getDirection(cities)[0] * 2)][location[1] - 1] == 'G')))
-                    {
-
-                        //cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
-                        cities[0].Location = new int[] { location[0] + (getDirection(cities)[0] * 2), location[1] };  //Pakeičiu klasėje naują vietą
-                        cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
-                        //System.Diagnostics.Debug.WriteLine("Paeinam į viršų. Dabartinės koordinatės: [" + (location[0] - 1) + ":" + (location[1] - 1) + "]");
-                    }
-                    ////end of try
-
-                    if ((cities[0].Map[location[0] - 1 + getDirection(cities)[0]][location[1] - 1] == '0') && (cities[0].Map[location[0] - 1][location[1] - 1 + getDirection(cities)[1]] != '0'))   //jei viršuje '0', o kaireje ne '0'
-                        {
-                            cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
-                            cities[0].Location = new int[] { location[0] + getDirection(cities)[0], location[1] };  //Pakeičiu klasėje naują vietą
-                            System.Diagnostics.Debug.WriteLine("Paeinam į viršų. Dabartinės koordinatės: [" + (location[0] - 1) + ":" + (location[1] - 1) + "]");
-                        }
-                        else
-                        {
-                            if (((cities[0].Map[location[0] - 1 + getDirection(cities)[0]][location[1] - 1] == '.') && ((cities[0].Map[location[0] - 1][location[1] - 1 + getDirection(cities)[1]] == '1'))))
-                            {
-                                cities[0].Map[location[0] - 1][location[1] - 1] = 'K';      //esamą vietą pažymiu 'K' keliu
-                                cities[0].Location = new int[] { location[0] + (getDirection(cities)[0] * 2), location[1] };  //Pakeičiu klasėje naują vietą
-                                System.Diagnostics.Debug.WriteLine("Paeinam į viršų. Dabartinės koordinatės: [" + (location[0] - 1) + ":" + (location[1] - 1) + "]");
-                            }
-                        }
-                    }
-                    //System.Diagnostics.Debug.WriteLine("Dabartinės koordinatės: [" + (location[0]-1) + ":" + (location[1]-1) + "]");
-                    //System.Diagnostics.Debug.WriteLine("Kairėje yra: " + cities[0].Map[location[0]-1][location[1]-1-1]);
-                    //System.Diagnostics.Debug.WriteLine("Viršuje yra: " + cities[0].Map[location[0]-1-1][location[1]-1]);
-                    //System.Diagnostics.Debug.WriteLine("Dešinėje yra: " + cities[0].Map[location[0]-1][location[1]]);
-                    //System.Diagnostics.Debug.WriteLine("Apačioje yra: " + cities[0].Map[location[0]][location[1]-1]);
-                    //}
-
-                
-
-            
-
+                }
+            }
             string pathR = Server.MapPath("~/App_Data/Res3.txt");
-            WriteFile(pathR, cities);
+            WriteFile(pathR, cities, visitedArea);
 
-            FindWay(cities);
+            FindWay(cities, visitedArea);
 
-            return 0;
+            return visitedArea;
         }
 
+        public bool isActive(List<City> cities, int y, int x)
+        {
+            if((x < 0) || (x > cities[0].MapSize-1) || (y < 0) || (y > cities[0].MapSize-1))
+            {
+                return false;
+            }
+            else
+            {
+                if(cities[0].Map[y][x] == '1')
+                {
+                    //return false;
+                }
+            }
+            
 
+         return true;
+        }
 
+        public char getNextDirectionByX(List<City> cities)
+        {
+            return cities[0].Map[cities[0].Location[0] - 1][cities[0].Location[1] - 1 + getDirection(cities)[1]];
+        }
 
+        public char getNextDirectionByY(List<City> cities)
+        {
+            return cities[0].Map[cities[0].Location[0] - 1 + getDirection(cities)[0]][cities[0].Location[1] - 1];
+        }
     }
 }
