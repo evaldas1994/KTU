@@ -11,6 +11,9 @@
         <div>
         </div>
         <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Pradėti" />
+        <p>
+            <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+        </p>
     </form>
 </body>
 </html>
