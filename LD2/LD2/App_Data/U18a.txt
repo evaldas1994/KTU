@@ -1,0 +1,9 @@
+﻿Vardas1 Pavardė1 TAX001
+Vardas2 Pavardė2 TAX002
+Vardas3 Pavardė3 TAX003
+Vardas4 Pavardė4 TAX004
+Vardas5 Pavardė5 TAX005
+Vardas6 Pavardė6 TAX006
+Vardas7 Pavardė7 TAX007
+Vardas8 Pavardė8 TAX008
+Vardas9 Pavardė9 TAX009
