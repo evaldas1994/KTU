@@ -1,0 +1,14 @@
+C:\Users\evald\code\KTU\KD1\KD1\bin\Debug\KD1.exe.config
+C:\Users\evald\code\KTU\KD1\KD1\bin\Debug\KD1.exe
+C:\Users\evald\code\KTU\KD1\KD1\bin\Debug\KD1.pdb
+C:\Users\evald\code\KTU\KD1\KD1\obj\Debug\KD1.csprojAssemblyReference.cache
+C:\Users\evald\code\KTU\KD1\KD1\obj\Debug\KD1.csproj.CoreCompileInputs.cache
+C:\Users\evald\code\KTU\KD1\KD1\obj\Debug\KD1.exe
+C:\Users\evald\code\KTU\KD1\KD1\obj\Debug\KD1.pdb
+D:\KTU\2 semestras\OP 2\KD1\KD1\bin\Debug\KD1.exe.config
+D:\KTU\2 semestras\OP 2\KD1\KD1\bin\Debug\KD1.exe
+D:\KTU\2 semestras\OP 2\KD1\KD1\bin\Debug\KD1.pdb
+D:\KTU\2 semestras\OP 2\KD1\KD1\obj\Debug\KD1.csprojAssemblyReference.cache
+D:\KTU\2 semestras\OP 2\KD1\KD1\obj\Debug\KD1.csproj.CoreCompileInputs.cache
+D:\KTU\2 semestras\OP 2\KD1\KD1\obj\Debug\KD1.exe
+D:\KTU\2 semestras\OP 2\KD1\KD1\obj\Debug\KD1.pdb
