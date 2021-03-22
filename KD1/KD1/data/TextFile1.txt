@@ -1,0 +1,6 @@
+﻿Fakultetas1 10
+Pav1, Vard1, GR1, 3, 2
+Pav2, Vard2, GR2, 5, 2, 2
+Pav3, Vard3, GR3, 4, 8, 1
+Pav4, Vard4, GR4, 5, 9
+Pav5, Vard5, GR5, 4, 2, 3
